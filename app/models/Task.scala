@@ -28,7 +28,14 @@ object Task {
     mongoCollection.find().map(task).toList
   }
 
-  def create(label: String) {}
+  def create(text: String) {
+    val tasks = mongoCollection
+    val orderBy = MongoDBObject("id" -> 1)
+    val maxId = tasks.find().sort(orderBy).limit(1).map(task).toList(0).id
+    val nextId = maxId + 1
+    val rec = MongoDBObject("id" -> nextId.toDouble, "text" -> text)
+    tasks.insert(rec)
+  }
 
   def update(id: Long, text: String) {}
 
