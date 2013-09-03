@@ -10,7 +10,8 @@ object Task {
   val collectionName = "tasks"
 
   def mongoCollection = {
-    val db = MongoClient()(databaseName)
+    val uri = MongoClientURI(sys.env("MONGOHQ_URL"))
+    val db = MongoClient(uri)(databaseName)
     db(collectionName)
   }
 
