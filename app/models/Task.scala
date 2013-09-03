@@ -6,7 +6,7 @@ case class Task(id: Long, text: String)
 
 object Task {
 
-  val databaseName = "test"
+  val databaseName = "app17905876"
   val collectionName = "tasks"
 
   def mongoCollection = {
