@@ -15,8 +15,13 @@ object Task {
   }
 
   def task(t: DBObject) = {
-    Task(t.as[Double]("id").toLong,
-         t.as[String]("text"))
+    val id = t.as[Any]("id") match {
+      case n: Double => n.toLong
+      case n: Int => n.toLong
+      case _ => throw new Exception("Expected id to be a number")
+    }
+    val text = t.as[String]("text")
+    Task(id, text)
   }
 
   def all(): List[Task] = {
