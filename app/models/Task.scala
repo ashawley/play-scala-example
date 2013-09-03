@@ -39,6 +39,10 @@ object Task {
 
   def update(id: Long, text: String) {}
 
-  def delete(id: Long) {}
+  def delete(id: Long) {
+    val tasks = mongoCollection
+    val where = MongoDBObject("id" -> id)
+    tasks.remove(where)
+  }
 
 }
