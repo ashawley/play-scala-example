@@ -82,6 +82,11 @@ class ApplicationSpec extends Specification {
         contentType(home) must beSome.which(_ == "text/html")
         contentAsString(home) must contain("Task one")
 
+        val result2 = controllers.Application.newTask(
+          FakeRequest().withFormUrlEncodedBody("text" -> "Task two")
+        )
+
+        status(result2) must equalTo(SEE_OTHER)
       }
     }
 
@@ -94,6 +99,19 @@ class ApplicationSpec extends Specification {
 
         status(result) must equalTo(SEE_OTHER)
         redirectLocation(result) must beSome.which(_ == "/tasks")
+
+        val nextUrl = redirectLocation(result) match {
+          case Some(s: String) => s
+          case _ => ""
+        }
+        nextUrl must contain("/tasks")
+
+        val home = route(FakeRequest(GET, nextUrl)).get
+
+        status(home) must equalTo(OK)
+        contentType(home) must beSome.which(_ == "text/html")
+        contentAsString(home) must not contain("Task one")
+        contentAsString(home) must contain("Task two")
 
       }
     }
